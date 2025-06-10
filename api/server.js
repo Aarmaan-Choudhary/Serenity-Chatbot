@@ -7,11 +7,18 @@ import { HfInference } from '@huggingface/inference';
 dotenv.config();
 
 const app = express();
-const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
+
+// Initialize Hugging Face client only if API key is available
+let hf;
+if (process.env.HUGGINGFACE_API_KEY) {
+  hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
+} else {
+  console.warn('HUGGINGFACE_API_KEY not found in environment variables');
+}
 
 // CORS configuration
 const corsOptions = {
-  origin: 'https://serenity-chatbot-88oz.vercel.app',
+  origin: ['https://serenity-chatbot-88oz.vercel.app', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   credentials: true,
@@ -24,7 +31,10 @@ app.use(cors(corsOptions));
 
 // Additional headers middleware
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://serenity-chatbot-88oz.vercel.app');
+  const origin = req.headers.origin;
+  if (origin && (origin.includes('serenity-chatbot-88oz.vercel.app') || origin.includes('localhost:5173'))) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -41,7 +51,14 @@ app.get("/", (req, res) => {
 // Add new endpoint for sentiment analysis
 app.post('/api/analyze', async (req, res) => {
   try {
+    if (!hf) {
+      throw new Error('Hugging Face API key not configured');
+    }
+
     const { text } = req.body;
+    if (!text) {
+      return res.status(400).json({ error: 'Text is required' });
+    }
     
     // Get sentiment analysis
     const sentimentResult = await hf.textClassification({
@@ -61,7 +78,11 @@ app.post('/api/analyze', async (req, res) => {
     });
   } catch (err) {
     console.error('Hugging Face API error:', err);
-    res.status(500).json({ error: err.toString() });
+    res.status(500).json({ 
+      error: 'Analysis failed',
+      message: err.message,
+      details: err.response?.data || err.toString()
+    });
   }
 });
 
@@ -69,28 +90,41 @@ app.post('/api/analyze', async (req, res) => {
 app.post('/api/chat', async (req, res) => {
   try {
     const { messages } = req.body;
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'Invalid messages format' });
+    }
+
     const lastUserMessage = messages[messages.length - 1].content;
+    let enhancedMessages = messages;
 
-    // Get sentiment and emotion analysis
-    const sentimentResult = await hf.textClassification({
-      model: 'distilbert-base-uncased-finetuned-sst-2-english',
-      inputs: lastUserMessage
-    });
+    // Only perform analysis if Hugging Face is configured
+    if (hf) {
+      try {
+        // Get sentiment and emotion analysis
+        const sentimentResult = await hf.textClassification({
+          model: 'distilbert-base-uncased-finetuned-sst-2-english',
+          inputs: lastUserMessage
+        });
 
-    const emotionResult = await hf.textClassification({
-      model: 'j-hartmann/emotion-english-distilroberta-base',
-      inputs: lastUserMessage
-    });
+        const emotionResult = await hf.textClassification({
+          model: 'j-hartmann/emotion-english-distilroberta-base',
+          inputs: lastUserMessage
+        });
 
-    // Add analysis context to the system message
-    const systemMessage = {
-      role: 'system',
-      content: `The user's message shows ${sentimentResult[0].label} sentiment and ${emotionResult[0].label} emotion. 
-      Please respond appropriately with empathy and understanding, considering their emotional state.`
-    };
+        // Add analysis context to the system message
+        const systemMessage = {
+          role: 'system',
+          content: `The user's message shows ${sentimentResult[0].label} sentiment and ${emotionResult[0].label} emotion. 
+          Please respond appropriately with empathy and understanding, considering their emotional state.`
+        };
 
-    // Add the system message to the beginning of the messages array
-    const enhancedMessages = [systemMessage, ...messages];
+        // Add the system message to the beginning of the messages array
+        enhancedMessages = [systemMessage, ...messages];
+      } catch (analysisError) {
+        console.warn('Analysis failed, proceeding without it:', analysisError);
+        // Continue with original messages if analysis fails
+      }
+    }
 
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
@@ -106,8 +140,12 @@ app.post('/api/chat', async (req, res) => {
     );
     res.json(response.data);
   } catch (err) {
-    console.error('API error:', err.response ? err.response.data : err.message);
-    res.status(500).json({ error: err.toString(), details: err.response ? err.response.data : undefined });
+    console.error('API error:', err);
+    res.status(500).json({ 
+      error: 'Chat request failed',
+      message: err.message,
+      details: err.response?.data || err.toString()
+    });
   }
 });
 
