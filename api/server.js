@@ -9,9 +9,21 @@ const app = express();
 
 // Update CORS settings to allow your Vercel frontend
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "https://serenity-chatbot.vercel.app",  // Your Vercel frontend URL
-  methods: ["GET", "POST"],
+  origin: function(origin, callback) {
+    const allowedOrigins = [
+      'https://serenity-chatbot-88oz.vercel.app',
+      'https://serenity-chatbot-88oz.vercel.app/',
+      'http://localhost:5173'  // For local development
+    ];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
 app.use(express.json());
@@ -30,7 +42,7 @@ app.post('/api/chat', async (req, res) => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          'HTTP-Referer': process.env.FRONTEND_URL || "https://serenity-chatbot.vercel.app",
+          'HTTP-Referer': process.env.FRONTEND_URL || "https://serenity-chatbot-88oz.vercel.app",
           'X-Title': 'Mindful Chat App'
         }
       }
