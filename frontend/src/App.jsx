@@ -5,7 +5,11 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 // Use environment variable for API URL with fallback
-const API_URL = import.meta.env.VITE_API_URL || "https://serenity-chat-api.onrender.com/api/chat";
+const API_URL = import.meta.env.VITE_API_URL || "https://serenity-chatbot-api.onrender.com/api/chat";
+
+// Debug log
+console.log("API URL:", API_URL);
+console.log("Environment variables:", import.meta.env);
 
 function App() {
   const initialMessages = [
@@ -127,6 +131,13 @@ function App() {
     ];
 
     try {
+      console.log('Sending request to:', API_URL);
+      console.log('Request payload:', {
+        model: "openai/gpt-3.5-turbo",
+        messages: apiMessages,
+        temperature: 0.7,
+      });
+      
       const response = await axios.post(
         API_URL,
         {
@@ -135,6 +146,9 @@ function App() {
           temperature: 0.7,
         }
       );
+      
+      console.log('API Response:', response.data);
+      
       setChats((prevChats) => {
         const updatedChats = [...prevChats];
         const chat = { ...updatedChats[currentChatIdx] };
@@ -146,6 +160,9 @@ function App() {
         return updatedChats;
       });
     } catch (err) {
+      console.error('API Error:', err);
+      console.error('Error details:', err.response?.data);
+      
       setChats((prevChats) => {
         const updatedChats = [...prevChats];
         const chat = { ...updatedChats[currentChatIdx] };
