@@ -16,6 +16,7 @@ A therapeutic chat application built with React and Express, designed to provide
 - Node.js (v14 or higher)
 - npm (v6 or higher)
 - An OpenRouter API key (get it from [OpenRouter](https://openrouter.ai/))
+- A Vercel account (for deployment)
 
 ## Project Structure
 
@@ -28,7 +29,9 @@ therapeutic-chat-app/
 
 ## Setup Instructions
 
-### Backend Setup
+### Local Development
+
+#### Backend Setup
 
 1. Navigate to the API directory:
    ```bash
@@ -54,7 +57,7 @@ therapeutic-chat-app/
 
 The backend will run on `http://localhost:3001`
 
-### Frontend Setup
+#### Frontend Setup
 
 1. Navigate to the frontend directory:
    ```bash
@@ -80,18 +83,63 @@ The frontend will run on `http://localhost:5173`
 
 ## Deployment
 
-### Backend Deployment (Render)
+### Deploying to Vercel (Recommended)
+
+1. Fork this repository to your GitHub account
+
+2. Go to [Vercel](https://vercel.com) and create a new project
+
+3. Import your forked repository
+
+4. Configure the project settings:
+   - Framework Preset: Vite
+   - Root Directory: `frontend`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Install Command: `npm install`
+
+5. Add the following environment variables:
+   ```
+   VITE_API_URL=https://your-project-name.vercel.app/api
+   ```
+
+6. Create a new project for the API:
+   - Go to your Vercel dashboard
+   - Create another project
+   - Import the same repository
+   - Configure settings:
+     - Root Directory: `api`
+     - Build Command: `npm install`
+     - Output Directory: `.`
+     - Install Command: `npm install`
+
+7. Add the following environment variables to the API project:
+   ```
+   OPENROUTER_API_KEY=your_openrouter_api_key
+   FRONTEND_URL=https://your-frontend-project.vercel.app
+   ```
+
+8. Deploy both projects
+
+### Alternative Deployment Options
+
+#### Backend Deployment (Render)
 
 1. Create a new Web Service on Render
 2. Connect your GitHub repository
 3. Set the following:
    - Build Command: `npm install`
    - Start Command: `node server.js`
+   - Environment: `Node`
+   - Node Version: `18.x` (or higher)
 4. Add environment variables:
-   - `OPENROUTER_API_KEY`
-   - `FRONTEND_URL` (your Vercel frontend URL)
+   - `PORT`: `10000` (Required for Render)
+   - `NODE_ENV`: `production`
+   - `OPENROUTER_API_KEY`: Your OpenRouter API key
+   - `FRONTEND_URL`: Your Vercel frontend URL (e.g., `https://serenity-chatbot-88oz.vercel.app`)
+5. Click "Create Web Service"
 
-### Frontend Deployment (Vercel)
+#### Frontend Deployment (Vercel)
 
 1. Create a new project on Vercel
 2. Connect your GitHub repository
@@ -100,14 +148,15 @@ The frontend will run on `http://localhost:5173`
    - Build Command: `npm run build`
    - Output Directory: `dist`
 4. Add environment variable:
-   - `VITE_API_URL` (your Render backend URL)
+   - `VITE_API_URL`: Your Render backend URL (e.g., `https://your-render-app.onrender.com/api/chat`)
 
 ## Environment Variables
 
 ### Backend (.env)
-- `PORT`: Server port (default: 3001)
+- `PORT`: Server port (3001 for local, 10000 for Render)
 - `OPENROUTER_API_KEY`: Your OpenRouter API key
 - `FRONTEND_URL`: Your frontend URL
+- `NODE_ENV`: Environment (development/production)
 
 ### Frontend (.env)
 - `VITE_API_URL`: Your backend API URL
