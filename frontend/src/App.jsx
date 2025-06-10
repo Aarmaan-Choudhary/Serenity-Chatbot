@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import reactLogo from './assets/react.svg'
+import reactLogo from './react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 const API_URL = "https://serenity-chatbot-aarmaan-choudharys-projects.vercel.app/api/chat";
