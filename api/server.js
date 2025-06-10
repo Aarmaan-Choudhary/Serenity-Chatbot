@@ -1,31 +1,25 @@
-// ... existing code ...
 import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
-// Update CORS settings to allow your GitHub Pages frontend
+// Update CORS settings to allow your Vercel frontend
 app.use(cors({
-  origin: "https://aarmaan-choudhary.github.io",  // replace with your actual GitHub Pages URL
+  origin: process.env.FRONTEND_URL || "https://serenity-chatbot.vercel.app",  // Your Vercel frontend URL
   methods: ["GET", "POST"],
   credentials: true,
 }));
 
 app.use(express.json());
 
-// ... existing code ...
-
-// ... existing code ...
-
-
-
 // Add this route to confirm backend is live
 app.get("/", (req, res) => {
   res.send("Serenity backend is live!");
 });
-
-// ... existing code ...
 
 app.post('/api/chat', async (req, res) => {
   try {
@@ -35,8 +29,8 @@ app.post('/api/chat', async (req, res) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer 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`, // <-- Replace with your OpenRouter key
-          'HTTP-Referer': 'https://aarmaan-choudhary.github.io', // <-- Your frontend URL
+          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          'HTTP-Referer': process.env.FRONTEND_URL || "https://serenity-chatbot.vercel.app",
           'X-Title': 'Mindful Chat App'
         }
       }
