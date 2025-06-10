@@ -7,24 +7,19 @@ dotenv.config();
 
 const app = express();
 
-// Update CORS settings to allow your Vercel frontend
-app.use(cors({
-  origin: function(origin, callback) {
-    const allowedOrigins = [
-      'https://serenity-chatbot-88oz.vercel.app',
-      'https://serenity-chatbot-88oz.vercel.app/',
-      'http://localhost:5173'  // For local development
-    ];
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
-}));
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://serenity-chatbot-88oz.vercel.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
 
 app.use(express.json());
 
@@ -42,7 +37,7 @@ app.post('/api/chat', async (req, res) => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          'HTTP-Referer': process.env.FRONTEND_URL || "https://serenity-chatbot-88oz.vercel.app",
+          'HTTP-Referer': 'https://serenity-chatbot-88oz.vercel.app',
           'X-Title': 'Mindful Chat App'
         }
       }
