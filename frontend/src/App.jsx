@@ -5,7 +5,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 // Use environment variable for API URL with fallback
-const API_URL = import.meta.env.VITE_API_URL || "https://serenity-chatbot-api.onrender.com/api/chat";
+const API_URL = "https://serenity-chatbot-api.onrender.com/api/chat";
 
 // Debug log
 console.log("API URL:", API_URL);
@@ -94,12 +94,11 @@ function App() {
     setInput("");
     setLoading(true);
 
-    // Build the message array for the API (system prompt + conversation + new user message)
+    // Build the message array for the API
     const apiMessages = [
       {
         role: "system",
-        content:  `
-        You are Serenity — a warm, emotionally intelligent mental health chatbot.
+        content: `You are Serenity — a warm, emotionally intelligent mental health chatbot.
         
         Speak like a kind, calm friend who listens deeply and responds supportively. Your tone should be gentle, conversational, and human — not robotic or clinical. Imagine texting a close, understanding friend.
         
@@ -144,10 +143,20 @@ function App() {
           model: "openai/gpt-3.5-turbo",
           messages: apiMessages,
           temperature: 0.7,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
         }
       );
       
       console.log('API Response:', response.data);
+      
+      if (!response.data || !response.data.choices || !response.data.choices[0]) {
+        throw new Error('Invalid response format from API');
+      }
       
       setChats((prevChats) => {
         const updatedChats = [...prevChats];
@@ -162,6 +171,8 @@ function App() {
     } catch (err) {
       console.error('API Error:', err);
       console.error('Error details:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      console.error('Error headers:', err.response?.headers);
       
       setChats((prevChats) => {
         const updatedChats = [...prevChats];
@@ -170,8 +181,7 @@ function App() {
           ...chat.messages,
           {
             role: "assistant",
-            content:
-              "I'm sorry, I couldn't process your request right now. Please try again.",
+            content: "I'm sorry, I couldn't process your request right now. Please try again.",
           },
         ];
         updatedChats[currentChatIdx] = chat;
