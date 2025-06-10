@@ -2,10 +2,12 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { HfInference } from '@huggingface/inference';
 
 dotenv.config();
 
 const app = express();
+const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
 // CORS configuration
 const corsOptions = {
@@ -36,11 +38,63 @@ app.get("/", (req, res) => {
   res.send("Serenity backend is live!");
 });
 
+// Add new endpoint for sentiment analysis
+app.post('/api/analyze', async (req, res) => {
+  try {
+    const { text } = req.body;
+    
+    // Get sentiment analysis
+    const sentimentResult = await hf.textClassification({
+      model: 'distilbert-base-uncased-finetuned-sst-2-english',
+      inputs: text
+    });
+
+    // Get emotion analysis
+    const emotionResult = await hf.textClassification({
+      model: 'j-hartmann/emotion-english-distilroberta-base',
+      inputs: text
+    });
+
+    res.json({
+      sentiment: sentimentResult,
+      emotion: emotionResult
+    });
+  } catch (err) {
+    console.error('Hugging Face API error:', err);
+    res.status(500).json({ error: err.toString() });
+  }
+});
+
+// Modify the chat endpoint to include analysis
 app.post('/api/chat', async (req, res) => {
   try {
+    const { messages } = req.body;
+    const lastUserMessage = messages[messages.length - 1].content;
+
+    // Get sentiment and emotion analysis
+    const sentimentResult = await hf.textClassification({
+      model: 'distilbert-base-uncased-finetuned-sst-2-english',
+      inputs: lastUserMessage
+    });
+
+    const emotionResult = await hf.textClassification({
+      model: 'j-hartmann/emotion-english-distilroberta-base',
+      inputs: lastUserMessage
+    });
+
+    // Add analysis context to the system message
+    const systemMessage = {
+      role: 'system',
+      content: `The user's message shows ${sentimentResult[0].label} sentiment and ${emotionResult[0].label} emotion. 
+      Please respond appropriately with empathy and understanding, considering their emotional state.`
+    };
+
+    // Add the system message to the beginning of the messages array
+    const enhancedMessages = [systemMessage, ...messages];
+
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
-      req.body,
+      { ...req.body, messages: enhancedMessages },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +106,7 @@ app.post('/api/chat', async (req, res) => {
     );
     res.json(response.data);
   } catch (err) {
-    console.error('OpenRouter API error:', err.response ? err.response.data : err.message);
+    console.error('API error:', err.response ? err.response.data : err.message);
     res.status(500).json({ error: err.toString(), details: err.response ? err.response.data : undefined });
   }
 });
