@@ -17,8 +17,23 @@ if (process.env.HUGGINGFACE_API_KEY) {
 }
 
 // CORS configuration
+const allowedOrigins = [
+  'https://serenity-chatbot-88oz.vercel.app',
+  'http://localhost:5173',
+  'https://serenity-chatbot.vercel.app'
+];
+
 const corsOptions = {
-  origin: ['https://serenity-chatbot-88oz.vercel.app', 'http://localhost:5173'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   credentials: true,
@@ -29,10 +44,13 @@ const corsOptions = {
 // Apply CORS middleware
 app.use(cors(corsOptions));
 
+// Handle OPTIONS requests
+app.options('*', cors(corsOptions));
+
 // Additional headers middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  if (origin && (origin.includes('serenity-chatbot-88oz.vercel.app') || origin.includes('localhost:5173'))) {
+  if (origin && allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
