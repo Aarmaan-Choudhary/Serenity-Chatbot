@@ -7,17 +7,25 @@ dotenv.config();
 
 const app = express();
 
-// Enable CORS for all routes
+// CORS configuration
+const corsOptions = {
+  origin: 'https://serenity-chatbot-88oz.vercel.app',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
+
+// Additional headers middleware
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://serenity-chatbot-88oz.vercel.app');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
   res.header('Access-Control-Allow-Credentials', 'true');
-  
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
   next();
 });
 
