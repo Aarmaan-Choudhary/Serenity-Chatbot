@@ -3,7 +3,9 @@ import axios from "axios";
 import reactLogo from './react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-const API_URL = "https://serenity-chatbot-aarmaan-choudharys-projects.vercel.app/api/chat";
+
+// Use environment variable for API URL with fallback
+const API_URL = import.meta.env.VITE_API_URL || "https://serenity-chat-api.onrender.com/api/chat";
 
 function App() {
   const initialMessages = [
