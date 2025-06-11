@@ -11,6 +11,8 @@ A therapeutic chat application built with React and Express, designed to provide
 - 📱 Responsive design
 - 🔒 Secure API communication
 
+Use this link to directly access the website: https://serenity-chatbot-88oz.vercel.app/
+
 ## Prerequisites
 
 - Node.js (v14 or higher)
