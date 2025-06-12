@@ -55,9 +55,7 @@ body, #root {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  /* Nature Unsplash background */
-  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   color: var(--header-color);
   font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
   display: flex;
@@ -65,6 +63,18 @@ body, #root {
   align-items: center;
   justify-content: flex-start;
   transition: background 0.3s;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
 }
 
 .app-container {
@@ -77,6 +87,8 @@ body, #root {
   min-height: 100vh;
   background: transparent;
   transition: background 0.3s;
+  position: relative;
+  z-index: 1;
 }
 
 .chat-box {
@@ -84,23 +96,24 @@ body, #root {
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(18px) saturate(1.2);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18), 0 1.5px 4px rgba(168,218,220,0.13);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
   border-radius: 24px;
   overflow: hidden;
   height: 80vh;
   width: 600px;
   max-width: 98vw;
   position: relative;
-  border: 1.5px solid rgba(168,218,220,0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.3s ease;
 }
 .dark-theme .chat-box {
-  background: rgba(35, 41, 70, 0.88);
-  backdrop-filter: blur(18px) saturate(1.2);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  border: 1.5px solid rgba(168,218,220,0.18);
+  background: rgba(35, 41, 70, 0.95);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .chat-header {
