@@ -2,7 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { HfInferenceClient } from '@huggingface/inference';
+import { HfInference } from '@huggingface/inference';
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ const app = express();
 // Initialize Hugging Face client only if API key is available
 let hf;
 if (process.env.HUGGINGFACE_API_KEY) {
-  hf = new HfInferenceClient(process.env.HUGGINGFACE_API_KEY);
+  hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 } else {
   console.warn('HUGGINGFACE_API_KEY not found in environment variables');
 }
