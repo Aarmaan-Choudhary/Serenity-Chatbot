@@ -61,7 +61,7 @@ function App() {
     function handleScroll() {
       const atBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight < 40;
       setShowScrollButton(!atBottom);
-    }
+    } 
     messagesDiv.addEventListener('scroll', handleScroll);
     // Initial check
     handleScroll();
@@ -309,7 +309,7 @@ function App() {
                 key={idx}
                 className={`message${msg.role === "user" ? " user" : ""} chat-fade-in`}
               >
-                <div className={`avatar ${msg.role}`}>{msg.role === "assistant" ? "S" : "U"}</div>
+                <div className={`avatar ${msg.role}`}></div>
                 <div className="bubble">
                   {isLong && !expanded ? (
                     <>
