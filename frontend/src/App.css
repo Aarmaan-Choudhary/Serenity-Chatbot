@@ -177,25 +177,30 @@ body::before {
 }
 
 .avatar {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #457b9d 0%, #1d3557 100%);
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 1.2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  user-select: none;
-  margin-bottom: 2px;
-  transition: all 0.2s ease;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+.avatar.assistant {
+  background-image: url('/serenity-avatar.png');
+  background-color: #457b9d;
+}
+
 .avatar.user {
-  background: linear-gradient(135deg, #e63946 0%, #a8dadc 100%);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: #1d3557;
+  color: white;
 }
 
 .bubble {
