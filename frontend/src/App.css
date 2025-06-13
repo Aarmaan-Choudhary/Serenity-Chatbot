@@ -199,8 +199,8 @@ body::before {
 }
 
 .avatar.user {
+  background-image: url('/user-avatar.png');
   background-color: #1d3557;
-  color: white;
 }
 
 .bubble {
