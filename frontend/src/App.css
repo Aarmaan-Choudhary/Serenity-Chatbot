@@ -101,17 +101,17 @@ body::before {
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  background: rgba(255, 255, 255, 0.92);
+  background: transparent;
   backdrop-filter: blur(8px) saturate(1.1);
   -webkit-backdrop-filter: blur(8px) saturate(1.1);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
+  box-shadow: none;
   border-radius: 24px;
   overflow: hidden;
   height: 90vh;
   width: 600px;
   max-width: calc(100vw - 300px);
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: none;
   transition: all 0.3s ease;
   margin: 2rem auto;
 }
@@ -123,15 +123,15 @@ body::before {
 }
 
 .chat-header {
-  background-color: var(--header-bg);
+  background-color: transparent;
   color: var(--header-color);
   padding: 1.2rem 1rem;
   font-size: 1.7rem;
   font-weight: bold;
   text-align: center;
   letter-spacing: 1px;
-  border-bottom: 1px solid var(--scrollbar-thumb);
-  box-shadow: 0 2px 8px rgba(168,218,220,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
 }
 
 .messages {
@@ -187,22 +187,24 @@ body::before {
 }
 
 .bubble {
-  background: var(--bubble-assistant-bg);
+  background: rgba(255, 255, 255, 0.1);
   padding: 14px 20px;
   border-radius: 18px 18px 18px 6px;
   max-width: 70%;
   width: fit-content;
   font-size: 1.08rem;
   color: var(--bubble-assistant-color);
-  box-shadow: 0 2px 8px rgba(168,218,220,0.10);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
   position: relative;
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 .message.user .bubble {
-  background: var(--bubble-user-bg);
+  background: rgba(255, 255, 255, 0.15);
   color: var(--bubble-user-color);
   border-radius: 18px 18px 6px 18px;
 }
@@ -211,35 +213,28 @@ body::before {
 }
 
 .input-area {
-  width: 100%;
-  max-width: 100%;
+  background: transparent;
+  padding: 1rem;
   display: flex;
+  gap: 0.5rem;
   align-items: center;
-  border-top: 1px solid #eee;
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  background: var(--privacy-bg);
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
-  justify-content: flex-start;
-  overflow: hidden;
-  gap: 0;
-  min-height: 56px;
-  height: 56px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 .input-area input[type="text"] {
-  flex: 0 1 480px;
-  max-width: 480px;
-  min-width: 120px;
-  padding: 10px 14px;
-  font-size: 1.02rem;
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  border: 1.5px solid var(--input-border);
-  background: var(--input-bg);
-  color: var(--header-color);
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--bubble-assistant-color);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.input-area input[type="text"]:focus {
   outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(168,218,220,0.04);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
 }
 .send-btn {
   background: #457b9d !important;
@@ -314,16 +309,12 @@ body::before {
 }
 
 .privacy-note {
-  width: 100%;
-  color: var(--privacy-color);
-  font-size: 15px;
   text-align: center;
-  background: var(--privacy-bg);
-  border-radius: 0 0 18px 18px;
-  padding: 10px 18px;
-  box-shadow: 0 -1px 4px rgba(168,218,220,0.06);
-  margin-top: auto;
-  margin-bottom: 0;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .chat-fade-in {
