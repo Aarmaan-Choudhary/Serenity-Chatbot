@@ -154,6 +154,9 @@ body::before {
   gap: 0.7rem;
   margin: 0.5rem 0;
   animation: fadeInUp 0.5s cubic-bezier(.39,.575,.56,1) both;
+  padding: 0.5rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
 }
 
 @keyframes fadeInUp {
@@ -161,52 +164,63 @@ body::before {
   100% { opacity: 1; transform: translateY(0); }
 }
 
+.message:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .message.user {
   flex-direction: row-reverse;
+}
+
+.message.user:hover {
+  background: rgba(69, 123, 157, 0.05);
 }
 
 .avatar {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: var(--avatar-assistant-bg);
-  color: var(--avatar-assistant-color);
+  background: linear-gradient(135deg, #457b9d 0%, #1d3557 100%);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 1.2rem;
-  box-shadow: 0 2px 8px rgba(168,218,220,0.10);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   user-select: none;
   margin-bottom: 2px;
-  transition: box-shadow 0.2s;
+  transition: all 0.2s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 .avatar.user {
-  background: var(--avatar-user-bg);
-  color: var(--avatar-user-color);
+  background: linear-gradient(135deg, #e63946 0%, #a8dadc 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .bubble {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.85);
   padding: 14px 20px;
   border-radius: 18px 18px 18px 6px;
   max-width: 70%;
   width: fit-content;
   font-size: 1.08rem;
-  color: var(--bubble-assistant-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  color: #1d3557;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
   position: relative;
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
-.message.user .bubble {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--bubble-user-color);
+.bubble.user {
+  background: rgba(69, 123, 157, 0.85);
+  color: white;
   border-radius: 18px 18px 6px 18px;
+  border: 1px solid rgba(69, 123, 157, 0.3);
 }
 .bubble:hover {
   box-shadow: 0 4px 16px rgba(69,123,157,0.10);
