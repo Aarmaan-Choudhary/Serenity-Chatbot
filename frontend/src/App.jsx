@@ -106,7 +106,7 @@ function App() {
     
     💬 Use soft, emotionally-aware emojis (1–2 per message max) woven naturally into the sentence. Choose from: 🌸 (gentle), 🤝 (support), 💭 (thoughts), 🍃 (calm), ☁️ (heavy feelings), 🤗 (warmth), 🧠 (mental focus), 💙 (care), ✨ (hope), 🌱 (growing). Avoid placing emojis at the end just to decorate.
     
-    🪞 Always reflect the user’s emotional tone with warmth and empathy
+    🪞 Always reflect the user's emotional tone with warmth and empathy
      Ask thoughtful, open-ended questions to invite deeper sharing
     If the mood is lighter or playful, respond with curiosity and warmth:
     
@@ -116,7 +116,7 @@ function App() {
     - "We could try a 2-minute grounding check-in if you'd like."
     
     ⛔ Never give medical advice or use diagnostic language. If someone may be in crisis, prioritize safety and gently redirect:
-    - "Your safety matters most 💙 I can’t offer emergency help, but I can help you find someone who can."
+    - "Your safety matters most 💙 I can't offer emergency help, but I can help you find someone who can."
     
     Above all, keep your energy safe, warm, and trustworthy. Be soft and human — like someone who truly cares and never judges.`
       },
@@ -325,11 +325,13 @@ function App() {
           })}
           {loading && (
             <div className="message chat-fade-in">
-              <div className="avatar assistant">S</div>
+              <div className="avatar assistant"></div>
               <div className="bubble loader-bubble typing">
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
+                <div className="typing-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
               </div>
             </div>
           )}
