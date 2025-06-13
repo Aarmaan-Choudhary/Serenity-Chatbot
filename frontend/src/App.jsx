@@ -327,11 +327,9 @@ function App() {
             <div className="message chat-fade-in">
               <div className="avatar assistant"></div>
               <div className="bubble loader-bubble typing">
-                <div className="typing-indicator">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
               </div>
             </div>
           )}
