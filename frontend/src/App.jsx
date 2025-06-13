@@ -61,7 +61,7 @@ function App() {
     function handleScroll() {
       const atBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight < 40;
       setShowScrollButton(!atBottom);
-    }x
+    }
     messagesDiv.addEventListener('scroll', handleScroll);
     // Initial check
     handleScroll();
