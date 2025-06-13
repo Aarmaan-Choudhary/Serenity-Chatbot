@@ -83,9 +83,9 @@ body::before {
 .app-container {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: flex-start;
-  padding: 1.5rem 0 0 0;
+  padding: 0;
   width: 100vw;
   min-height: 100vh;
   background: transparent;
@@ -105,12 +105,13 @@ body::before {
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
   border-radius: 24px;
   overflow: hidden;
-  height: 80vh;
+  height: 90vh;
   width: 600px;
-  max-width: 98vw;
+  max-width: calc(100vw - 300px);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.25);
   transition: all 0.3s ease;
+  margin: 2rem auto;
 }
 .dark-theme .chat-box {
   background: rgba(35, 41, 70, 0.92);
@@ -355,15 +356,35 @@ body::before {
   40% { transform: scale(1.2); opacity: 1; }
 }
 
-@media (max-width: 700px) {
-  .chat-box {
-    width: 98vw;
-    min-width: 0;
-    border-radius: 12px;
+@media (max-width: 900px) {
+  .app-container {
     padding: 0;
   }
-  .messages {
-    padding: 1rem 0.5rem 0.5rem 0.5rem;
+  
+  .sidebar {
+    width: 240px;
+  }
+  
+  .chat-box {
+    width: calc(100vw - 260px);
+    margin: 1rem auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    width: 200px;
+    padding: 1rem 0.8rem;
+  }
+  
+  .chat-box {
+    width: calc(100vw - 220px);
+    margin: 0.5rem auto;
+  }
+  
+  .new-chat-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -675,19 +696,19 @@ body::before {
   align-items: flex-start;
   justify-content: flex-start;
   padding: 1.5rem 1rem;
-  width: 250px;
-  height: 80vh;
+  width: 280px;
+  height: 100vh;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(8px) saturate(1.1);
   -webkit-backdrop-filter: blur(8px) saturate(1.1);
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
-  border-radius: 0 24px 24px 0;
+  border-radius: 0;
   overflow: hidden;
-  position: relative;
+  position: fixed;
+  left: 0;
+  top: 0;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  margin-right: 1.5rem;
   transition: all 0.3s ease;
-  margin-left: 0;
 }
 .chat-list {
   display: flex;
@@ -722,14 +743,11 @@ body::before {
 }
 @media (max-width: 900px) {
   .app-container {
-    padding: 1rem 0 0 0;
-    justify-content: flex-start;
+    padding: 0;
   }
   
   .sidebar {
-    width: 200px;
-    margin-right: 1rem;
-    border-radius: 0 18px 18px 0;
+    width: 240px;
   }
   
   .chat-list {
@@ -743,7 +761,7 @@ body::before {
 
 @media (max-width: 700px) {
   .sidebar {
-    width: 180px;
+    width: 200px;
     padding: 1rem 0.8rem;
   }
   
